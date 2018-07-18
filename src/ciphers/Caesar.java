@@ -24,13 +24,16 @@
 package ciphers;
 
 import javax.swing.ButtonGroup;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /**
  *
  * @author Tyler Hickam <tylershub.com>
  */
 public class Caesar extends javax.swing.JPanel {
-
     /**
      * Creates new form Caesar
      */
@@ -39,6 +42,77 @@ public class Caesar extends javax.swing.JPanel {
         ButtonGroup modeButtons = new ButtonGroup();
         modeButtons.add(encryptRadio);
         modeButtons.add(decryptRadio);
+        
+        inputTextArea.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateOutput(inputTextArea.getText());
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateOutput(inputTextArea.getText());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                
+            }
+        });
+        
+        keySlider.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent event) {
+                updateOutput(inputTextArea.getText());
+            }
+        });
+    }
+    
+    private void updateOutput(String input) {
+        char[] charArray = input.toCharArray();
+        int[] intArray = new int[charArray.length];
+        
+        for(int i = 0; i < charArray.length; i++) {
+            intArray[i] = (int)charArray[i];
+        }
+        
+        int[] cryptedInts = encryptOrDecrypt(intArray);
+        char[] cryptedChars = new char[cryptedInts.length];
+        
+        for(int i = 0; i < cryptedInts.length; i++) {
+            cryptedChars[i] = (char)cryptedInts[i];
+        }
+        
+        String output = new String(cryptedChars);
+        outputTextArea.setText(output);
+    }
+    
+    private int[] encryptOrDecrypt(int[] ints) {
+        int modeAdjuster = 1;
+        int key = keySlider.getValue();
+        
+        if(decryptRadio.isSelected()) {
+            modeAdjuster = -1;
+        }
+        
+        for(int i = 0; i < ints.length; i++) {
+            int charInt = ints[i];
+            int posAdjustment = 0;
+            
+            if(charInt >= 65 && charInt <= 90) {
+                posAdjustment = 65;
+            } else if(charInt >= 97 && charInt <= 122) {
+                posAdjustment = 97;
+            }
+            
+            if(posAdjustment != 0) {
+                int adjustedInt = charInt - posAdjustment;
+                int cryptedInt = Math.floorMod(adjustedInt + (modeAdjuster*key),26)+posAdjustment;
+                ints[i] = cryptedInt;
+            }
+        }
+        
+        return ints;
     }
 
     /**
@@ -121,6 +195,7 @@ public class Caesar extends javax.swing.JPanel {
             }
         });
 
+        outputTextArea.setEditable(false);
         outputTextArea.setColumns(20);
         outputTextArea.setRows(5);
         jScrollPane2.setViewportView(outputTextArea);
@@ -195,10 +270,12 @@ public class Caesar extends javax.swing.JPanel {
 
     private void encryptRadioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_encryptRadioActionPerformed
         // TODO add your handling code here:
+        updateOutput(inputTextArea.getText());
     }//GEN-LAST:event_encryptRadioActionPerformed
 
     private void decryptRadioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_decryptRadioActionPerformed
         // TODO add your handling code here:
+        updateOutput(inputTextArea.getText());
     }//GEN-LAST:event_decryptRadioActionPerformed
 
 
