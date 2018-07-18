@@ -34,6 +34,7 @@ public class GUI extends javax.swing.JFrame {
      */
     public GUI() {
         initComponents();
+        tabbedPane.addTab("Caesar's Cipher", new Caesar());
     }
 
     /**
@@ -46,7 +47,6 @@ public class GUI extends javax.swing.JFrame {
     private void initComponents() {
 
         tabbedPane = new javax.swing.JTabbedPane();
-        caesarPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Ciphers");
@@ -55,19 +55,6 @@ public class GUI extends javax.swing.JFrame {
         setResizable(false);
 
         tabbedPane.setName("Tabs"); // NOI18N
-
-        javax.swing.GroupLayout caesarPanelLayout = new javax.swing.GroupLayout(caesarPanel);
-        caesarPanel.setLayout(caesarPanelLayout);
-        caesarPanelLayout.setHorizontalGroup(
-            caesarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 795, Short.MAX_VALUE)
-        );
-        caesarPanelLayout.setVerticalGroup(
-            caesarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 572, Short.MAX_VALUE)
-        );
-
-        tabbedPane.addTab("Caesar's Cipher", caesarPanel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -119,7 +106,6 @@ public class GUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel caesarPanel;
     private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables
 }
